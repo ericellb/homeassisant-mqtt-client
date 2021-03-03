@@ -1,3 +1,17 @@
+<!-- PROJECT LOGO -->
+<p align="center">
+  <a href="https://github.com/ericellb/homeassisant-mqtt-client">
+    <img src="images/home_assistant.png" alt="Logo" width="120" height="120">
+  </a>
+  </br>
+  <a href="https://github.com/ericellb/homeassisant-mqtt-client">
+    <img src="images/mqtt.png" alt="Logo" width="400" height="80">
+  </a>
+  <p align="center">
+    NodeJS <a href="https://mqtt.org/">MQTT</a> Client built to use with <a href="https://www.home-assistant.io/">Home Assisant</a> to add automation to your computer.
+  </p>
+</p>
+
 <!-- TABLE OF CONTENTS -->
 <details open="open">
   <summary>Table of Contents</summary>
