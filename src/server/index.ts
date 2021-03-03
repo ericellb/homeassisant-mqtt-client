@@ -1,8 +1,10 @@
 import dotenv from 'dotenv';
-import { createMqttListener } from './mqtt/mqttListener';
+import mqtt from 'mqtt';
+import { createMQTTListener } from './mqtt';
 import { MQTTOptions } from './mqtt/types';
 import topicCommands from '../topicCommands.json';
 import { createLogger } from './logger';
+import { createCommandInterpreter } from './interpreter';
 
 dotenv.config();
 
@@ -19,7 +21,15 @@ if (!mqttOtptions.url || !mqttOtptions.username || !mqttOtptions.password) {
 }
 
 if (mqttOtptions.url || mqttOtptions.username || mqttOtptions.password) {
-  const mqttListener = createMqttListener(mqttOtptions, logger);
-  mqttListener.connect();
-  mqttListener.subscribeTopicsForInterpreters(topicCommands);
+  const mqttClient = mqtt.connect(mqttOtptions.url, {
+    username: mqttOtptions.username,
+    password: mqttOtptions.password
+  });
+
+  mqttClient.on('connect', () => {
+    logger.info(`Connected to MQTT Broker ${mqttOtptions.url}`);
+    const commandInterpreter = createCommandInterpreter();
+    const mqttListener = createMQTTListener(mqttClient, commandInterpreter, logger);
+    mqttListener.subscribeTopicsForInterpreters(topicCommands);
+  });
 }

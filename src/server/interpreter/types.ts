@@ -17,6 +17,10 @@ export interface NircmdCommand {
 
 export type Command = ApplicationCommand | NircmdCommand;
 
+export interface CommandInterpreter {
+  run(command: Command, payload: string): void;
+}
+
 export interface TopicCommand {
   topic: string;
   commands: Command[];
