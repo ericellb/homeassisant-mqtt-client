@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import { createMqttListener } from './mqtt/mqttListener';
 import { MQTTOptions } from './mqtt/types';
-import topicCommands from './topicCommands.json';
+import topicCommands from '../topicCommands.json';
 import { createLogger } from './logger';
 
 dotenv.config();
