@@ -45,8 +45,6 @@ TODO
 
 ### Built With
 
-This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
-
 - TypeScript (NodeJS)
 - MQTT
 
@@ -54,16 +52,19 @@ This section should list any major frameworks that you built your project using.
 
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+Download the latest release.
+
+This is an example of how you may give instructions on setting up your project locally. To get a local copy up and running follow these simple example steps.
+
+### Installation (for contributers)
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
+This is an example of how to list things you need to use the contribute and how to install them.
 
-- npm
-
-### Installation
+- [mqtt broker (mosquitto)](https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-the-mosquitto-mqtt-messaging-broker-on-ubuntu-16-04)
+- [nircmd (OPTIONAL)](https://www.nirsoft.net/utils/nircmd.html)
+  - Allows you to control some windows setting such as default sound device in windows and many more.
 
 1. Clone the repo
 
@@ -82,6 +83,15 @@ This is an example of how to list things you need to use the software and how to
    MQTT_USERNAME = 'your_username';
    MQTT_PASSWORD = 'your_password';
    ```
+
+### Installation (for users)
+
+1. Download the release
+2. Add the homeassistant-mqtt-client.exe to windows startup folder
+3. Add the included VBS script that will autorun the exe
+4. Run the cli-integration-adder to add new custom integrations
+5. Start the homeassistant-mqtt-client (will auto start on next startup)
+6. Profit!
 
 ## Usage
 
