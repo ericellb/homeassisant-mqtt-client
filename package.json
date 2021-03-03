@@ -9,7 +9,9 @@
   "scripts": {
     "lint": "./node_modules/.bin/eslint --ignore-path .gitignore .",
     "build": "tsc",
-    "build:exe": "pkg . --targets node12-win-x64 --output binaries/win/homeassistant-mqtt-client-win",
+    "build:exe:server": "pkg ./bin/server/index.js --targets node12-win-x64 --output binaries/win/homeassistant-mqtt-server-win",
+    "build:exe:cli": "pkg ./bin/cli/index.js --targets node12-win-x64 --output binaries/win/homeassistant-mqtt-cli-win",
+    "build:exe": "yarn build:exe:server && yarn build:exe:cli",
     "start": "ts-node src/index.ts",
     "test": "mocha ./src/**/*.spec.ts",
     "test:watch": "jest --watch",
