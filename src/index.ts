@@ -15,7 +15,7 @@ const mqttOtptions: MQTTOptions = {
 const logger = createLogger();
 
 if (!mqttOtptions.url || !mqttOtptions.username || !mqttOtptions.password) {
-  logger.error('Missing one of environment variables (MQTT_URL, MQTT_USERNAME, MQTT_PASSWORD)');
+  logger.error('Make sure you have a .env file with the following: (MQTT_URL, MQTT_USERNAME, MQTT_PASSWORD)');
 }
 
 if (mqttOtptions.url || mqttOtptions.username || mqttOtptions.password) {
