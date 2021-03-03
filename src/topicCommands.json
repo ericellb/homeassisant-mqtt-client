@@ -3,7 +3,7 @@
     "topic": "cmnd/computer",
     "commands": [
       {
-        "command": "C:\\Windows\\System32\\calc.exe",
+        "path": "C:\\Windows\\System32\\calc.exe",
         "type": "application",
         "expectedPayloads": [
           "open calculator",
@@ -12,7 +12,7 @@
         ]
       },
       {
-        "command": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\Valheim.exe",
+        "path": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\Valheim.exe",
         "type": "application",
         "expectedPayloads": [
           "open valheim",

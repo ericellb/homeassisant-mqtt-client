@@ -1,24 +1,19 @@
 import { execSync } from 'child_process';
-import { buildOpenAppliationCommand, buildOutputDeviceCommand } from './commandBuilders';
-import { Command } from './types';
+import { buildOpenAppliationCommand, buildNircmdCommand } from './commandBuilders';
+import { ApplicationCommand, Command, NircmdCommand } from './types';
 
 export const createCommandInterpreter = () => {
   const run = (command: Command, payload: string) => {
     let builtCommand = '';
 
-    switch (command.command) {
-      case 'setdefaultsounddevice':
-        builtCommand = buildOutputDeviceCommand(command.command, payload);
-        break;
-      case 'C:\\Windows\\System32\\calc.exe':
-        builtCommand = buildOpenAppliationCommand(command.command);
-        break;
-      case 'C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\Valheim.exe':
-        builtCommand = buildOpenAppliationCommand(command.command);
-        break;
-      default:
-        builtCommand = '';
-        break;
+    if (command.type === 'application') {
+      const applicationCommand = command as ApplicationCommand;
+      builtCommand = buildOpenAppliationCommand(applicationCommand.path);
+    }
+
+    if (command.type === 'nircmd') {
+      const nircmdCommand = command as NircmdCommand;
+      builtCommand = buildNircmdCommand(nircmdCommand.command, payload);
     }
 
     if (!builtCommand || builtCommand === '') {
