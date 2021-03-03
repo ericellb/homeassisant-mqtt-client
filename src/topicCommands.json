@@ -1,0 +1,34 @@
+[
+  {
+    "topic": "cmnd/computer",
+    "commands": [
+      {
+        "command": "C:\\Windows\\System32\\calc.exe",
+        "type": "application",
+        "expectedPayloads": [
+          "open calculator",
+          "calculator",
+          "open the calculator"
+        ]
+      },
+      {
+        "command": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\Valheim.exe",
+        "type": "application",
+        "expectedPayloads": [
+          "open valheim",
+          "play valheim",
+          "start valheim"
+        ]
+      },
+      {
+        "command": "setdefaultsounddevice",
+        "type": "nircmd",
+        "extraArgument": " 1",
+        "expectedPayloads": [
+          "Headphones",
+          "Speakers"
+        ]
+      }
+    ]
+  }
+]
