@@ -19,6 +19,9 @@
     "import/no-unresolved": "off",
     "comma-dangle": "off",
     "function-paren-newline": "off",
-    "arrow-body-style": "off"
+    "arrow-body-style": "off",
+    "max-len": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "error"
   }
 }

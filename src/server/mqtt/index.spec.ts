@@ -1,16 +1,24 @@
+/* eslint-disable object-curly-newline */
+/* eslint-disable no-unused-expressions */
 import mqtt from 'mqtt';
 import dotenv from 'dotenv';
 import sinon from 'sinon';
+import chai, { expect } from 'chai';
+import { describe, it, beforeEach, afterEach } from 'mocha';
+import chaisAsPromised from 'chai-as-promised';
 import { MQTTOptions } from './types';
-import { expect } from 'chai';
 import { createMQTTListener } from '.';
-import { createLogger } from '../logger';
+import { createLogger } from '../../logger';
 import { createCommandInterpreter } from '../interpreter';
+import { CommandInterpreter } from '../interpreter/types';
 
-describe.only('Tests the MQTT Listener', () => {
+describe('Tests the MQTT Listener', () => {
   dotenv.config();
-  const logger = createLogger({ level: 'silent' });
+  chai.use(chaisAsPromised);
+  const logger = createLogger({ level: 'silent', outputFile: 'log.txt' });
   let loggerSpy: sinon.SinonSpy;
+  let commandInterpreter: CommandInterpreter;
+  let commandInterpreterStub: sinon.SinonStub;
 
   const mqttOtptions: MQTTOptions = {
     url: process.env.MQTT_URL ?? '',
@@ -19,7 +27,10 @@ describe.only('Tests the MQTT Listener', () => {
   };
 
   beforeEach(() => {
+    // Spy on error method to know when errors were thown in the mqtt sub event handlers
     loggerSpy = sinon.spy(logger, 'error');
+    commandInterpreter = createCommandInterpreter();
+    commandInterpreterStub = sinon.stub(commandInterpreter, 'run');
   });
 
   afterEach(() => {
@@ -27,17 +38,10 @@ describe.only('Tests the MQTT Listener', () => {
   });
 
   // Requires an MQTT Broker for tests to run
-  it('Should Connect to an MQTT Broker', done => {
-    const mqttClient = mqtt.connect(mqttOtptions.url, {
-      username: mqttOtptions.username,
-      password: mqttOtptions.password
-    });
-
-    mqttClient.on('connect', () => {
-      expect(mqttClient.connected).to.be.true;
-      mqttClient.end();
-      done();
-    });
+  it('Should Connect to an MQTT Broker', async () => {
+    const mqttListener = createMQTTListener(mqttOtptions, commandInterpreter, logger);
+    await mqttListener.connect();
+    expect(mqttListener.connect()).to.eventually.be.fulfilled;
   });
 
   it('Should be able to subscribe to topic, receive an event and pass it to the commandInterpeter (if command is valid)', async () => {
@@ -66,17 +70,14 @@ describe.only('Tests the MQTT Listener', () => {
       }
     ];
 
-    // Create and stub the command interpeter to check if its called with right arguments
-    const commandInterpreter = createCommandInterpreter();
-    const commandInterpreterStub = sinon.stub(commandInterpreter, 'run');
-
     // Create our mqtt listener to fire off an paylod on a topic
-    const mqttListener = createMQTTListener(mqttClient, commandInterpreter, logger);
+    const mqttListener = createMQTTListener(mqttOtptions, commandInterpreter, logger);
+    await mqttListener.connect();
     mqttListener.subscribeTopicsForInterpreters(topicCommands);
 
     // Publish an event of the topic and payload
     const payload = topicCommands[0].commands[0].expectedPayloads[0];
-    const topic = topicCommands[0].topic;
+    const { topic } = topicCommands[0];
 
     mqttClient.publish(topic, payload);
 
@@ -114,27 +115,23 @@ describe.only('Tests the MQTT Listener', () => {
       }
     ];
 
-    // Create and stub the command interpeter to check if its called with right arguments
-    const commandInterpreter = createCommandInterpreter();
-    const commandInterpreterStub = sinon.stub(commandInterpreter, 'run');
-
     // Create our mqtt listener to fire off an paylod on a topic
-    const mqttListener = createMQTTListener(mqttClient, commandInterpreter, logger);
+    const mqttListener = createMQTTListener(mqttOtptions, commandInterpreter, logger);
+    await mqttListener.connect();
     mqttListener.subscribeTopicsForInterpreters(topicCommands);
 
     // Publish an event of the topic and payload
-    const expectedPayloads = topicCommands[0].commands[0].expectedPayloads;
+    const { expectedPayloads } = topicCommands[0].commands[0];
     const payload = 'someInvalidPayload';
-    const topic = topicCommands[0].topic;
+    const { topic } = topicCommands[0];
 
     mqttClient.publish(topic, payload);
 
     // Need to wait until the published command gets received
     await new Promise(res => setTimeout(res, 100));
 
-    // Check the command interpreter stub to make sure its called with proper data
-    // This confirm that we successfully subscribed to the topic
-    expect(commandInterpreterStub.called).to.be.false;
+    // No way to check if error thrown inside subscription event handler
+    // so we make sure the logger was called with the correct error message
     expect(loggerSpy.args[0][0]).to.equal(
       `No expectedPayloads match on Topic: ${topic} Payload: ${payload} | Expected Payloads: ${expectedPayloads}`
     );

@@ -1,8 +1,25 @@
-import { MqttClient } from 'mqtt';
-import { Logger } from 'pino';
+import mqtt, { MqttClient } from 'mqtt';
+import { CustomLogger } from '../../logger';
 import { CommandInterpreter, TopicCommand } from '../interpreter/types';
+import { MQTTOptions } from './types';
 
-export const createMQTTListener = (mqttClient: MqttClient, commandInterpreter: CommandInterpreter, logger: Logger) => {
+export const createMQTTListener = (opts: MQTTOptions, commandInterpreter: CommandInterpreter, logger: CustomLogger) => {
+  let mqttClient: MqttClient;
+
+  const connect = async (): Promise<void> => {
+    mqttClient = mqtt.connect(opts.url, {
+      username: opts.username,
+      password: opts.password
+    });
+
+    await new Promise((res, rej) => {
+      mqttClient.on('connect', res);
+      mqttClient.on('error', rej);
+    });
+
+    logger.info(`Connected to MQTT Broker ${opts.url}`);
+  };
+
   const subscribeTopicsForInterpreters = (topicCommands: TopicCommand[]) => {
     // Subscribe to each topic, and get a list of them all
     topicCommands.map(topicCommand => {
@@ -40,6 +57,7 @@ export const createMQTTListener = (mqttClient: MqttClient, commandInterpreter: C
   };
 
   return {
+    connect,
     subscribeTopicsForInterpreters
   };
 };
