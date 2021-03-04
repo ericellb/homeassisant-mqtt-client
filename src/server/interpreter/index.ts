@@ -1,8 +1,8 @@
 import { execSync } from 'child_process';
 import { buildOpenAppliationCommand, buildNircmdCommand } from './commandBuilders';
-import { ApplicationCommand, Command, NircmdCommand } from './types';
+import { ApplicationCommand, Command, CommandInterpreter, NircmdCommand } from './types';
 
-export const createCommandInterpreter = () => {
+export const createCommandInterpreter = (exec: typeof execSync = execSync): CommandInterpreter => {
   const run = (command: Command, payload: string) => {
     let builtCommand = '';
 
@@ -20,7 +20,7 @@ export const createCommandInterpreter = () => {
       return;
     }
 
-    execSync(builtCommand);
+    exec(builtCommand);
   };
 
   return {

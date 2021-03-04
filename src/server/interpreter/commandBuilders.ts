@@ -1,4 +1,4 @@
-export const commandInBackground = 'cmd.exe /c ';
+export const commandInBackground = 'cmd.exe /c';
 
 // Builds a command to change the default output device in windows
 export const buildNircmdCommand = (command: string, payload: string, extraArgument: string = '1') =>

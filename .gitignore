@@ -3,4 +3,5 @@ node_modules
 .env
 /bin
 /coverage
-/src/sample
+/binaries
+log.txt
