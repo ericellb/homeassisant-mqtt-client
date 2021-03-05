@@ -12,7 +12,8 @@ import { createLogger } from '../../logger';
 import { createCommandInterpreter } from '../interpreter';
 import { CommandInterpreter } from '../interpreter/types';
 
-describe('Tests the MQTT Listener', () => {
+// Requires an MQTT Broker - Integration Test
+describe('Integration Test - Tests the MQTT Listener', () => {
   dotenv.config();
   chai.use(chaisAsPromised);
   const logger = createLogger({ level: 'silent', outputFile: 'log.txt' });
@@ -61,9 +62,8 @@ describe('Tests the MQTT Listener', () => {
         topic: 'cmnd/computer',
         commands: [
           {
-            command: 'setdefaultsounddevice',
-            type: 'nircmd',
-            extraArgument: ' 1',
+            command: 'setDefaultSoundDevice',
+            type: 'audioCmdlet',
             expectedPayloads: ['Headphones', 'Speakers']
           }
         ]

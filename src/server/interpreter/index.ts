@@ -1,9 +1,13 @@
+/* eslint-disable dot-notation */
 import { execSync } from 'child_process';
-import { buildOpenAppliationCommand, buildNircmdCommand } from './commandBuilders';
-import { ApplicationCommand, Command, CommandInterpreter, NircmdCommand } from './types';
+import { createAudioDeviceCmdletsIntegration } from '../integrations/audioDeviceCmdlets';
+import { buildOpenAppliationCommand } from './commandBuilders';
+import { ApplicationCommand, Command, CommandInterpreter, AudioCmdletCommand } from './types';
 
 export const createCommandInterpreter = (exec: typeof execSync = execSync): CommandInterpreter => {
-  const run = (command: Command, payload: string) => {
+  const audioCmdlet = createAudioDeviceCmdletsIntegration();
+
+  const run = async (command: Command, payload: string) => {
     let builtCommand = '';
 
     if (command.type === 'application') {
@@ -11,9 +15,18 @@ export const createCommandInterpreter = (exec: typeof execSync = execSync): Comm
       builtCommand = buildOpenAppliationCommand(applicationCommand.path);
     }
 
-    if (command.type === 'nircmd') {
-      const nircmdCommand = command as NircmdCommand;
-      builtCommand = buildNircmdCommand(nircmdCommand.command, payload);
+    // Possible create multiple interpreters to avoid tons of if statements in here?
+    if (command.type === 'audioCmdlet') {
+      const audioCmdletCommand = command as AudioCmdletCommand;
+      if (audioCmdletCommand.command === 'setDefaultAudioDevice') {
+        return audioCmdlet.setDefaultAudioDevice(payload);
+      }
+      if (audioCmdletCommand.command === 'setDefaultAudioDeviceVolume') {
+        return audioCmdlet.setDefaultAudioDeviceVolume(parseFloat(payload));
+      }
+      if (audioCmdletCommand.command === 'setDefaultAudioDeviceMuteState') {
+        return audioCmdlet.setDefaultAudioDeviceMuteState(Boolean(payload));
+      }
     }
 
     if (!builtCommand || builtCommand === '') {
