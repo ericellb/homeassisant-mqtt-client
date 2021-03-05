@@ -1,11 +1,13 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable no-undef */
 import childProcess from 'child_process';
 import sinon from 'sinon';
 import { expect } from 'chai';
 import { createCommandInterpreter } from '.';
 import { ApplicationCommand, NircmdCommand } from './types';
 
-describe('Tests the Command Interpreter', () => {
-  let execSyncStub = sinon.stub(childProcess, 'execSync');
+describe('Unit Test - Tests the Command Interpreter', () => {
+  const execSyncStub = sinon.stub(childProcess, 'execSync');
   const commandInterpreter = createCommandInterpreter(childProcess.execSync);
 
   afterEach(() => {
