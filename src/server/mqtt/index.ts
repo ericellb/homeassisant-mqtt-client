@@ -28,7 +28,7 @@ export const createMQTTListener = (opts: MQTTOptions, commandInterpreter: Comman
     });
 
     // Setup listener for messages on any of the topics we subscribed on
-    mqttClient.on('message', (topic, payloadBuffer) => {
+    mqttClient.on('message', async (topic, payloadBuffer) => {
       const payload = payloadBuffer.toString();
 
       // Find which command was issued based on the topic
@@ -52,7 +52,7 @@ export const createMQTTListener = (opts: MQTTOptions, commandInterpreter: Comman
       }
 
       logger.info(`Handling Command ${JSON.stringify(command)} with payload [${payload}]`);
-      commandInterpreter.run(command, payload);
+      await commandInterpreter.run(command, payload);
     });
   };
 

@@ -63,8 +63,11 @@ This is an example of how you may give instructions on setting up your project l
 This is an example of how to list things you need to use the contribute and how to install them.
 
 - [mqtt broker (mosquitto)](https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-the-mosquitto-mqtt-messaging-broker-on-ubuntu-16-04)
-- [nircmd (OPTIONAL)](https://www.nirsoft.net/utils/nircmd.html)
-  - Allows you to control some windows setting such as default sound device in windows and many more.
+- [AudioCmdlets (OPTIONAL)](https://github.com/frgnca/AudioDeviceCmdlets)
+  - Required to use any of the audioCmdlets build in commands
+    - Change Sound Devices
+    - Control Volume
+    - Change mute state
 
 1. Clone the repo
 

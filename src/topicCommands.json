@@ -21,9 +21,8 @@
         ]
       },
       {
-        "command": "setdefaultsounddevice",
-        "type": "nircmd",
-        "extraArgument": " 1",
+        "command": "setDefaultAudioDevice",
+        "type": "audioCmdlet",
         "expectedPayloads": [
           "Headphones",
           "Speakers"

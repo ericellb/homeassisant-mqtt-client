@@ -62,9 +62,8 @@ describe('Integration Test - Tests the MQTT Listener', () => {
         topic: 'cmnd/computer',
         commands: [
           {
-            command: 'setdefaultsounddevice',
-            type: 'nircmd',
-            extraArgument: ' 1',
+            command: 'setDefaultSoundDevice',
+            type: 'audioCmdlet',
             expectedPayloads: ['Headphones', 'Speakers']
           }
         ]

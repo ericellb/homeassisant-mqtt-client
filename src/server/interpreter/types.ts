@@ -5,20 +5,18 @@ export interface ApplicationCommand {
   path: string;
   type: string;
   expectedPayloads: string[];
-  extraArgument?: string;
 }
 
-export interface NircmdCommand {
+export interface AudioCmdletCommand {
   command: string;
   type: string;
   expectedPayloads: string[];
-  extraArgument?: string;
 }
 
-export type Command = ApplicationCommand | NircmdCommand;
+export type Command = ApplicationCommand | AudioCmdletCommand;
 
 export interface CommandInterpreter {
-  run(command: Command, payload: string): void;
+  run(command: Command, payload: string): Promise<void>;
 }
 
 export interface TopicCommand {

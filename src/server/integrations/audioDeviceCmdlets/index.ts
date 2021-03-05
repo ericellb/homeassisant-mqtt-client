@@ -1,9 +1,11 @@
-import { asyncExec as aExec } from '../../helpers/asyncExec';
+import { powerShellExec as pExec } from '../../helpers/asyncPowershell';
 import { AudioDeviceCmdletsIntegration } from './types';
 
-export const createAudioDeviceCmdletsIntegration = (asyncExec: typeof aExec = aExec): AudioDeviceCmdletsIntegration => {
+export const createAudioDeviceCmdletsIntegration = (
+  powerShellExec: typeof pExec = pExec
+): AudioDeviceCmdletsIntegration => {
   const getDefaultAudioDevice = async (): Promise<string | null> => {
-    const response = await asyncExec('powershell.exe -command Get-AudioDevice -Playback');
+    const response = await powerShellExec('Get-AudioDevice -Playback');
     if (typeof response === 'string') {
       const defaultPlaybackDeviceRegexMatch = response.match(/(?<=Name[\s]{4}: )\w+/);
       if (defaultPlaybackDeviceRegexMatch) {
@@ -14,19 +16,19 @@ export const createAudioDeviceCmdletsIntegration = (asyncExec: typeof aExec = aE
   };
 
   const setDefaultAudioDevice = async (deviceName: string): Promise<void> => {
-    const response = await asyncExec('powershell.exe -command Get-AudioDevice -List');
+    const response = await powerShellExec('Get-AudioDevice -List');
     if (typeof response === 'string') {
       const regex = `(${deviceName}[\\(\\w\\s\\)]+\\nID\\s{6}:\\s)(.*)`;
       const targetPlaybackDeviceRegexMatch = response.match(new RegExp(regex));
       if (targetPlaybackDeviceRegexMatch) {
         const playbackDeviceId = targetPlaybackDeviceRegexMatch[2];
-        await asyncExec(`powershell.exe -command Set-AudioDevice -ID '"${playbackDeviceId}"'`);
+        await powerShellExec(`Set-AudioDevice -ID "${playbackDeviceId}"`);
       }
     }
   };
 
   const getDefaultAudioDeviceVolume = async (): Promise<number | null> => {
-    const response = await asyncExec('powershell.exe -command Get-AudioDevice -PlaybackVolume');
+    const response = await powerShellExec('Get-AudioDevice -PlaybackVolume');
     if (typeof response === 'string') {
       const volume = parseFloat(response.split('%')[0]);
       return volume;
@@ -35,11 +37,11 @@ export const createAudioDeviceCmdletsIntegration = (asyncExec: typeof aExec = aE
   };
 
   const setDefaultAudioDeviceVolume = async (volume: number): Promise<void> => {
-    await asyncExec(`powershell.exe -command Set-AudioDevice -PlaybackVolume "${volume}"`);
+    await powerShellExec(`Set-AudioDevice -PlaybackVolume "${volume}"`);
   };
 
   const getDefaultAudioDeviceMuteState = async (): Promise<boolean | null> => {
-    const response = await asyncExec('powershell.exe -command Get-AudioDevice -PlaybackMute');
+    const response = await powerShellExec('Get-AudioDevice -PlaybackMute');
     if (typeof response === 'string') {
       return Boolean(response);
     }
@@ -48,7 +50,7 @@ export const createAudioDeviceCmdletsIntegration = (asyncExec: typeof aExec = aE
 
   const setDefaultAudioDeviceMuteState = async (mute: boolean): Promise<void> => {
     const muteState = mute ? 1 : 0;
-    await asyncExec(`powershell.exe -command Set-AudioDevice -PlaybackMute ${muteState}`);
+    await powerShellExec(`Set-AudioDevice -PlaybackMute ${muteState}`);
   };
 
   return {
