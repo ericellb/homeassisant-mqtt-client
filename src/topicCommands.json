@@ -28,6 +28,15 @@
           "Headphones",
           "Speakers"
         ]
+      },
+      {
+        "command": "setdefaultsounddevice",
+        "type": "nircmd",
+        "extraArgument": " 1",
+        "expectedPayloads": [
+          "Headphones",
+          "NEWNEW"
+        ]
       }
     ]
   }

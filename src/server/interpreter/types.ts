@@ -1,18 +1,23 @@
-// eslint-disable-next-line no-unused-vars
-export type Implements<T, U extends T> = {};
+export enum CommandKeys {
+  COMMAND = 'command',
+  PATH = 'path',
+  TYPE = 'type',
+  EXPECTED_PAYLOADS = 'expectedPayloads',
+  EXTRA_ARGUMENT = 'extraArgument'
+}
 
 export interface ApplicationCommand {
-  path: string;
-  type: string;
-  expectedPayloads: string[];
-  extraArgument?: string;
+  [CommandKeys.PATH]: string;
+  [CommandKeys.TYPE]: string;
+  [CommandKeys.EXPECTED_PAYLOADS]: string[];
+  [CommandKeys.EXTRA_ARGUMENT]?: string;
 }
 
 export interface NircmdCommand {
-  command: string;
-  type: string;
-  expectedPayloads: string[];
-  extraArgument?: string;
+  [CommandKeys.COMMAND]: string;
+  [CommandKeys.TYPE]: string;
+  [CommandKeys.EXPECTED_PAYLOADS]: string[];
+  [CommandKeys.EXTRA_ARGUMENT]?: string;
 }
 
 export type Command = ApplicationCommand | NircmdCommand;
@@ -24,4 +29,9 @@ export interface CommandInterpreter {
 export interface TopicCommand {
   topic: string;
   commands: Command[];
+}
+
+export enum CommandTypes {
+  AUDIO_CMDLET = 'audioCmdlet',
+  APPLICATION = 'application'
 }
