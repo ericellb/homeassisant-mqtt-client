@@ -1,8 +1,8 @@
 import inquirer from 'inquirer';
 import { AutocompleteQuestionOptions } from 'inquirer-autocomplete-prompt';
-import { CommandKeys, TopicCommand } from '../../server/interpreter/types';
+import { Command, CommandKeys, TopicCommand } from '../../server/interpreter/types';
 import { getEvents } from '../helpers/data';
-import { asyncReadFile } from '../helpers/fs';
+import { asyncReadFile, asyncWriteFile } from '../helpers/fs';
 
 const search = (input: string | undefined, list: string[]) => {
   if (input === undefined) {
@@ -59,9 +59,7 @@ const addEvent = async () => {
   {
     type: 'input',
     name: CommandKeys.EXTRA_ARGUMENT,
-    message: 'What is the command to execute?',
-    when: (answers: any) => answers.type === 'nircmd',
-    validate: input => input !== ''
+    message: 'Enter an extra argument (optional)',
   },
   {
     type: 'autocomplete',
@@ -96,7 +94,7 @@ const addEvent = async () => {
     }
   }];
 
-  const answers = await inquirer.prompt(questions);
+  const answers = await inquirer.prompt(questions) as (Command & { topic: string });
 
   console.log('Adding new event:\n', answers);
   const { confirmed } = await inquirer.prompt([{
@@ -111,9 +109,21 @@ const addEvent = async () => {
     console.log('Event not added. Returning to main menu.');
   }
 
-  const rawData = await asyncReadFile(`${__dirname}/../../topicCommands.json`);
-  const jsonData = JSON.parse(rawData.toString()) as TopicCommand[];
-  console.log(jsonData[0].commands);
+  // rewrite the json file
+  const newJsonData: TopicCommand[] = [];
+  const allUniqueTopics = [...uniqueTopics, answers.topic];
+  const allEvents = [...events, answers];
+  allUniqueTopics.forEach(topic => {
+    const eventsThisTopic = allEvents.filter(event => event.topic === topic).map(event => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { topic: unusedTopic, ...eventWithoutTopic } = event;
+      return eventWithoutTopic;
+    });
+
+    newJsonData.push({ topic, commands: eventsThisTopic });
+  });
+
+  await asyncWriteFile(`${__dirname}/../../topicCommands.json`, JSON.stringify(newJsonData, null, 2));
 };
 
 export default addEvent;
