@@ -1,8 +1,7 @@
 import inquirer from 'inquirer';
 import { AutocompleteQuestionOptions } from 'inquirer-autocomplete-prompt';
-import { Command, CommandKeys, TopicCommand } from '../../server/interpreter/types';
-import { getEvents } from '../helpers/data';
-import { asyncWriteFile } from '../helpers/fs';
+import { Command, TopicCommand } from '../../server/interpreter/types';
+import { getEvents, writeData } from '../helpers/data';
 
 const search = (input: string | undefined, list: string[]) => {
   if (input === undefined) {
@@ -38,7 +37,7 @@ const addEvent = async () => {
   },
   {
     type: 'autocomplete',
-    name: CommandKeys.TYPE,
+    name: 'type',
     message: 'What is the command type?',
     suggestOnly: true,
     source: (answersSoFar, input) =>
@@ -47,26 +46,26 @@ const addEvent = async () => {
   },
   {
     type: 'input',
-    name: CommandKeys.PATH,
+    name: 'path',
     message: 'What is the file path of the executable to launch?',
     when: (answers: any) => answers.type === 'application',
     validate: input => input !== ''
   },
   {
     type: 'input',
-    name: CommandKeys.COMMAND,
+    name: 'command',
     message: 'What is the command to execute?',
     when: (answers: any) => answers.type === 'nircmd',
     validate: input => input !== ''
   },
   {
     type: 'input',
-    name: CommandKeys.EXTRA_ARGUMENT,
+    name: 'extraArgument',
     message: 'Enter an extra argument (optional)',
   },
   {
     type: 'autocomplete',
-    name: CommandKeys.EXPECTED_PAYLOADS,
+    name: 'expectedPayloads',
     message: 'What are the payload options? Must be unique. Separate with commas.',
     suggestOnly: true,
     validate: input => {
@@ -127,7 +126,7 @@ const addEvent = async () => {
     newJsonData.push({ topic, commands: eventsThisTopic });
   });
 
-  await asyncWriteFile(`${__dirname}/../../topicCommands.json`, JSON.stringify(newJsonData, null, 2));
+  await writeData(newJsonData);
 };
 
 export default addEvent;

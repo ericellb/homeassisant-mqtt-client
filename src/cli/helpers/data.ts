@@ -1,10 +1,14 @@
 import { TopicCommand } from '../../server/interpreter/types';
-import { asyncReadFile } from './fs';
+import { asyncReadFile, asyncWriteFile } from './fs';
 
 export const getData = async () => {
   const rawData = await asyncReadFile(`${__dirname}/../../topicCommands.json`);
   const jsonData = JSON.parse(rawData.toString()) as TopicCommand[];
   return jsonData;
+};
+
+export const writeData = async (data: TopicCommand[]) => {
+  await asyncWriteFile(`${__dirname}/../../topicCommands.json`, JSON.stringify(data, null, 2));
 };
 
 export const getEvents = async () => {
