@@ -7,5 +7,4 @@ declare module 'inquirer' {
   }
 }
 
-export const setup = () =>
-  inquirer.registerPrompt('autocomplete', AutocompletePrompt);
+export const setup = () => inquirer.registerPrompt('autocomplete', AutocompletePrompt);

@@ -5,12 +5,14 @@ const registeredEvents = async () => {
   const rawData = await asyncReadFile(`${__dirname}/../../topicCommands.json`);
   const jsonData = JSON.parse(rawData.toString()) as TopicCommand[];
 
-  const events = jsonData.map(topicCommands => {
-    return topicCommands.commands.map(command => ({
-      ...command,
-      topic: topicCommands.topic
-    }));
-  }).flat();
+  const events = jsonData
+    .map(topicCommands => {
+      return topicCommands.commands.map(command => ({
+        ...command,
+        topic: topicCommands.topic
+      }));
+    })
+    .flat();
 
   console.table(events);
 };

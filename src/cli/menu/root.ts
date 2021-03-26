@@ -13,38 +13,41 @@ const choices = {
 };
 
 const root = () => {
-  inquirer.prompt({
-    type: 'list',
-    name: 'root',
-    message: 'Main Menu. Select one of the following options:',
-    choices: Array.from(Object.values(choices)),
-    prefix: '',
-  }).then(async selection => {
-    switch (selection.root) {
-      case choices.registeredEvents:
-        await registeredEvents();
-        break;
-      case choices.addEvent:
-        await addEvent();
-        break;
-      case choices.modifyEvent:
-        await modifyEvent();
-        break;
-      case choices.deleteEvent:
-        await deleteEvent();
-        break;
-      default:
-        console.log('unrecognized selection');
-    }
-    root();
-  });
+  inquirer
+    .prompt({
+      type: 'list',
+      name: 'root',
+      message: 'Main Menu. Select one of the following options:',
+      choices: Array.from(Object.values(choices)),
+      prefix: ''
+    })
+    .then(async selection => {
+      switch (selection.root) {
+        case choices.registeredEvents:
+          await registeredEvents();
+          break;
+        case choices.addEvent:
+          await addEvent();
+          break;
+        case choices.modifyEvent:
+          await modifyEvent();
+          break;
+        case choices.deleteEvent:
+          await deleteEvent();
+          break;
+        default:
+          console.log('unrecognized selection');
+      }
+      root();
+    });
 };
 
 export const init = () => {
   console.log(
-    '\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\n'
-  + '| Home Assistant MQTT Client CLI |\n'
-  + '/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\\n');
+    '\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\n' +
+      '| Home Assistant MQTT Client CLI |\n' +
+      '/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\/\\\n'
+  );
 
   setup();
   root();
