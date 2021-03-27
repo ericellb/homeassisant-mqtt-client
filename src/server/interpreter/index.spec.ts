@@ -1,11 +1,14 @@
+/* eslint-disable no-unused-expressions */
+
 import childProcess from 'child_process';
 import sinon from 'sinon';
 import { expect } from 'chai';
+import { describe, it, afterEach } from 'mocha';
 import { createCommandInterpreter } from '.';
-import { ApplicationCommand, NircmdCommand } from './types';
+import { ApplicationCommand, CommandTypes, NircmdCommand } from './types';
 
 describe('Tests the Command Interpreter', () => {
-  let execSyncStub = sinon.stub(childProcess, 'execSync');
+  const execSyncStub = sinon.stub(childProcess, 'execSync');
   const commandInterpreter = createCommandInterpreter(childProcess.execSync);
 
   afterEach(() => {
@@ -15,7 +18,7 @@ describe('Tests the Command Interpreter', () => {
   it('Should open an Appliation', () => {
     const applicationCommand: ApplicationCommand = {
       path: 'C:\\Windows\\System32\\calc.exe',
-      type: 'application',
+      type: 'application' as CommandTypes.APPLICATION,
       expectedPayloads: ['open calculator', 'calculator']
     };
     const payload = 'calculator';
@@ -28,7 +31,7 @@ describe('Tests the Command Interpreter', () => {
   it('Should run a Nircmd command', () => {
     const applicationCommand: NircmdCommand = {
       command: 'setdefaultsounddevice',
-      type: 'nircmd',
+      type: 'nircmd' as CommandTypes.NIRCMD,
       expectedPayloads: ['Headphones', 'Speakers']
     };
 

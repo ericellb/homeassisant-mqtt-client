@@ -10,7 +10,7 @@ import { MQTTOptions } from './types';
 import { createMQTTListener } from '.';
 import { createLogger } from '../../logger';
 import { createCommandInterpreter } from '../interpreter';
-import { CommandInterpreter } from '../interpreter/types';
+import { CommandInterpreter, CommandTypes, TopicCommand } from '../interpreter/types';
 
 describe('Tests the MQTT Listener', () => {
   dotenv.config();
@@ -56,13 +56,13 @@ describe('Tests the MQTT Listener', () => {
       });
     });
 
-    const topicCommands = [
+    const topicCommands: TopicCommand[] = [
       {
         topic: 'cmnd/computer',
         commands: [
           {
             command: 'setdefaultsounddevice',
-            type: 'nircmd',
+            type: 'nircmd' as CommandTypes.NIRCMD,
             extraArgument: ' 1',
             expectedPayloads: ['Headphones', 'Speakers']
           }
@@ -101,13 +101,13 @@ describe('Tests the MQTT Listener', () => {
       });
     });
 
-    const topicCommands = [
+    const topicCommands: TopicCommand[] = [
       {
         topic: 'cmnd/computer',
         commands: [
           {
             command: 'setdefaultsounddevice',
-            type: 'nircmd',
+            type: 'nircmd' as CommandTypes.NIRCMD,
             extraArgument: ' 1',
             expectedPayloads: ['Headphones', 'Speakers']
           }
