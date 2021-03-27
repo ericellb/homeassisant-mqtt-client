@@ -8,7 +8,6 @@ import selectLineMenu from './selectLine';
 const modifyEvent = async () => {
   const data = await getData();
 
-  // const topics = data.map(topicCommand => topicCommand.topic);
   const selectedEvent = await selectedEventMenu(data);
   let modifiedEvent = { ...selectedEvent.event };
 
@@ -18,7 +17,7 @@ const modifyEvent = async () => {
     const { editedLine } = await editLinesMenu(modifiedEvent, keyToEdit);
 
     if (keyToEdit === 'type') {
-      if (editedLine !== selectedEvent.event.type) {
+      if (editedLine !== modifiedEvent.type) {
         if (modifiedEvent.type === CommandTypes.APPLICATION) {
           const { path, ...withoutPath } = modifiedEvent;
           modifiedEvent = { ...withoutPath, type: CommandTypes.NIRCMD, command: path };
