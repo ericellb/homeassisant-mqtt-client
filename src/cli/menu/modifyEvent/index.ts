@@ -1,11 +1,13 @@
 import inquirer from 'inquirer';
 import { CommandTypes, TopicCommand } from '../../../server/interpreter/types';
-import { getData, writeData } from '../../helpers/data';
 import editLinesMenu from './editLines';
 import selectedEventMenu from './selectedEvent';
 import selectLineMenu from './selectLine';
 
-const modifyEvent = async () => {
+const modifyEvent = async (
+  getData: () => Promise<TopicCommand[]>,
+  writeData: (data: TopicCommand[]) => Promise<void>
+): Promise<TopicCommand[] | undefined> => {
   const data = await getData();
 
   const selectedEvent = await selectedEventMenu(data);
@@ -75,6 +77,8 @@ const modifyEvent = async () => {
   const updatedTopicCommand = { topic: selectedEvent.topic, commands };
   const newData = commands.length < 1 ? otherTopicCommands : [...otherTopicCommands, updatedTopicCommand];
   await writeData(newData);
+  // eslint-disable-next-line consistent-return
+  return newData;
 };
 
 export default modifyEvent;

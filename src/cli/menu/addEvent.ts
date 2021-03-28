@@ -1,7 +1,8 @@
+/* eslint-disable consistent-return */
 import inquirer from 'inquirer';
 import { AutocompleteQuestionOptions } from 'inquirer-autocomplete-prompt';
-import { Command, TopicCommand } from '../../server/interpreter/types';
-import { getEvents, writeData } from '../helpers/data';
+import { Command, CommandTypes, TopicCommand } from '../../server/interpreter/types';
+import { getEvents } from '../helpers/data';
 import { filterPayload } from '../helpers/filter';
 
 const search = (input: string | undefined, list: string[]) => {
@@ -15,14 +16,11 @@ const search = (input: string | undefined, list: string[]) => {
   return Promise.resolve(matches);
 };
 
-const addEvent = async () => {
-  const events = await getEvents();
+const addEvent = async (getData: () => Promise<TopicCommand[]>, writeData: (data: TopicCommand[]) => any) => {
+  const events = await getEvents(getData);
 
   const topics = events.map(event => event.topic);
   const uniqueTopics = Array.from(new Set(topics));
-
-  const commandTypes = events.map(event => event.type);
-  const uniqueCommandTypes = Array.from(new Set(commandTypes));
 
   const payloadOptions = events.map(event => event.expectedPayloads).flat();
   const uniquePayloadOptions = Array.from(new Set(payloadOptions));
@@ -37,12 +35,10 @@ const addEvent = async () => {
       validate: input => input !== ''
     },
     {
-      type: 'autocomplete',
+      type: 'list',
       name: 'type',
       message: 'What is the command type?',
-      suggestOnly: true,
-      source: (answersSoFar, input) => search(input, uniqueCommandTypes),
-      validate: input => input !== ''
+      choices: Object.values(CommandTypes)
     },
     {
       type: 'input',
@@ -99,7 +95,7 @@ const addEvent = async () => {
 
   // rewrite the json file
   const newJsonData: TopicCommand[] = [];
-  const allUniqueTopics = [...uniqueTopics, answers.topic];
+  const allUniqueTopics = Array.from(new Set([...uniqueTopics, answers.topic]));
   const allEvents = [...events, answers];
   allUniqueTopics.forEach(topic => {
     const eventsThisTopic = allEvents
@@ -114,6 +110,7 @@ const addEvent = async () => {
   });
 
   await writeData(newJsonData);
+  return newJsonData;
 };
 
 export default addEvent;

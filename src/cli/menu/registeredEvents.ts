@@ -1,9 +1,8 @@
 import { TopicCommand } from '../../server/interpreter/types';
-import { asyncReadFile } from '../helpers/fs';
+import { getData } from '../helpers/data';
 
-const registeredEvents = async () => {
-  const rawData = await asyncReadFile(`${__dirname}/../../topicCommands.json`);
-  const jsonData = JSON.parse(rawData.toString()) as TopicCommand[];
+const registeredEvents = async (getDataFn?: () => TopicCommand[]) => {
+  const jsonData = getDataFn ? getDataFn() : await getData();
 
   const events = jsonData
     .map(topicCommands => {
@@ -15,6 +14,7 @@ const registeredEvents = async () => {
     .flat();
 
   console.table(events);
+  return events;
 };
 
 export default registeredEvents;

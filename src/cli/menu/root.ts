@@ -4,6 +4,7 @@ import registeredEvents from './registeredEvents';
 import { setup } from './config/setup';
 import modifyEvent from './modifyEvent';
 import deleteEvent from './deleteEvent';
+import { getData, writeData } from '../helpers/data';
 
 const choices = {
   registeredEvents: 'Show registered events',
@@ -27,13 +28,13 @@ const root = () => {
           await registeredEvents();
           break;
         case choices.addEvent:
-          await addEvent();
+          await addEvent(getData, writeData);
           break;
         case choices.modifyEvent:
-          await modifyEvent();
+          await modifyEvent(getData, writeData);
           break;
         case choices.deleteEvent:
-          await deleteEvent();
+          await deleteEvent(getData, writeData);
           break;
         default:
           console.log('unrecognized selection');

@@ -1,6 +1,5 @@
 import inquirer from 'inquirer';
 import { Command, CommandTypes, TopicCommand } from '../../server/interpreter/types';
-import { getData, writeData } from '../helpers/data';
 
 interface Answers {
   topic: string;
@@ -8,7 +7,10 @@ interface Answers {
   confirmed: boolean;
 }
 
-const deleteEvent = async () => {
+const deleteEvent = async (
+  getData: () => Promise<TopicCommand[]>,
+  writeData: (data: TopicCommand[]) => Promise<void>
+) => {
   const data = await getData();
   const topics = data.map(topicCommand => topicCommand.topic);
 
