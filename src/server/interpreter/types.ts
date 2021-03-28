@@ -9,12 +9,14 @@ export interface ApplicationCommand {
   path: string;
   type: CommandTypes.APPLICATION;
   expectedPayloads: string[];
+  extraArgument?: string;
 }
 
 export interface AudioCmdletCommand {
   command: string;
   type: CommandTypes.NIRCMD;
   expectedPayloads: string[];
+  extraArgument?: string;
 }
 
 export type Command = ApplicationCommand | AudioCmdletCommand;

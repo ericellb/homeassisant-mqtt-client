@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 import inquirer from 'inquirer';
 import { AutocompleteQuestionOptions } from 'inquirer-autocomplete-prompt';
 import { Command, CommandTypes, TopicCommand } from '../../server/interpreter/types';

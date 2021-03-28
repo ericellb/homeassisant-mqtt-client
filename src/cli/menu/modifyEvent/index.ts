@@ -77,7 +77,6 @@ const modifyEvent = async (
   const updatedTopicCommand = { topic: selectedEvent.topic, commands };
   const newData = commands.length < 1 ? otherTopicCommands : [...otherTopicCommands, updatedTopicCommand];
   await writeData(newData);
-  // eslint-disable-next-line consistent-return
   return newData;
 };
 
