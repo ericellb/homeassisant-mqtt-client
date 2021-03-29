@@ -16,21 +16,3 @@ export const getData = async () => {
 export const writeData = async (data: TopicCommand[]) => {
   await asyncWriteFile(`${__dirname}/../../topicCommands.json`, JSON.stringify(data, null, 2));
 };
-
-export const convertDataToEventFormat = (data: TopicCommand[]) => {
-  const events = data
-    .map(topicCommands => {
-      return topicCommands.commands.map(command => ({
-        ...command,
-        topic: topicCommands.topic
-      }));
-    })
-    .flat();
-  return events;
-};
-
-export const getEvents = async (getDataFn: () => Promise<TopicCommand[]>) => {
-  const data = await getDataFn();
-  const events = convertDataToEventFormat(data);
-  return events;
-};

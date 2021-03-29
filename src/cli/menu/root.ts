@@ -19,7 +19,7 @@ const root = () => {
       type: 'list',
       name: 'root',
       message: 'Main Menu. Select one of the following options:',
-      choices: Array.from(Object.values(choices)),
+      choices: Object.values(choices),
       prefix: ''
     })
     .then(async selection => {

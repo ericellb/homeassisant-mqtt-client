@@ -15,7 +15,7 @@ const selectLineMenu = async (event: Command) => {
 
       const keys = Object.keys(event);
       // add optional keys
-      const allKeys = Array.from(new Set([...keys, 'extraArgument']));
+      const allKeys = [...new Set([...keys, 'extraArgument'])];
 
       allKeys.forEach(key => {
         choices.push({

@@ -1,28 +1,40 @@
 import inquirer from 'inquirer';
 import { AutocompleteQuestionOptions } from 'inquirer-autocomplete-prompt';
 import { Command, CommandTypes, TopicCommand } from '../../server/interpreter/types';
-import { getEvents } from '../helpers/data';
 import { filterPayload } from '../helpers/filter';
 
-const search = (input: string | undefined, list: string[]) => {
+const getEvents = async (getDataFn: () => Promise<TopicCommand[]>) => {
+  const data = await getDataFn();
+  const events = data
+    .map(topicCommands => {
+      return topicCommands.commands.map(command => ({
+        ...command,
+        topic: topicCommands.topic
+      }));
+    })
+    .flat();
+  return events;
+};
+
+const search = async (input: string | undefined, list: string[]) => {
   if (input === undefined) {
-    return Promise.resolve(list);
+    return list;
   }
 
   const matches = list
     .map(topic => (topic.includes(input) ? topic : undefined))
     .filter((topic): topic is string => !!topic);
-  return Promise.resolve(matches);
+  return matches;
 };
 
 const addEvent = async (getData: () => Promise<TopicCommand[]>, writeData: (data: TopicCommand[]) => any) => {
   const events = await getEvents(getData);
 
   const topics = events.map(event => event.topic);
-  const uniqueTopics = Array.from(new Set(topics));
+  const uniqueTopics = [...new Set(topics)];
 
   const payloadOptions = events.map(event => event.expectedPayloads).flat();
-  const uniquePayloadOptions = Array.from(new Set(payloadOptions));
+  const uniquePayloadOptions = [...new Set(payloadOptions)];
 
   const questions: AutocompleteQuestionOptions[] | inquirer.QuestionCollection = [
     {
@@ -94,7 +106,7 @@ const addEvent = async (getData: () => Promise<TopicCommand[]>, writeData: (data
 
   // rewrite the json file
   const newJsonData: TopicCommand[] = [];
-  const allUniqueTopics = Array.from(new Set([...uniqueTopics, answers.topic]));
+  const allUniqueTopics = [...new Set([...uniqueTopics, answers.topic])];
   const allEvents = [...events, answers];
   allUniqueTopics.forEach(topic => {
     const eventsThisTopic = allEvents
