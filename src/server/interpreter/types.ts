@@ -1,16 +1,22 @@
-// eslint-disable-next-line no-unused-vars
-export type Implements<T, U extends T> = {};
+export type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
+
+export enum CommandTypes {
+  APPLICATION = 'application',
+  NIRCMD = 'nircmd'
+}
 
 export interface ApplicationCommand {
   path: string;
-  type: string;
+  type: CommandTypes.APPLICATION;
   expectedPayloads: string[];
+  extraArgument?: string;
 }
 
 export interface AudioCmdletCommand {
   command: string;
-  type: string;
+  type: CommandTypes.NIRCMD;
   expectedPayloads: string[];
+  extraArgument?: string;
 }
 
 export type Command = ApplicationCommand | AudioCmdletCommand;

@@ -5,3 +5,5 @@ node_modules
 /coverage
 /binaries
 log.txt
+
+yarn-error.log
