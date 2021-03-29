@@ -51,7 +51,7 @@ describe('Tests the CLI', () => {
   it('should save data when add new event', () => {
     const fakeData: TopicCommand[] = [];
 
-    const getDataMock = () => Promise.resolve(fakeData);
+    const getDataMock = async () => fakeData;
     const writeDataMock = (out: TopicCommand[]) => out;
 
     const topic = 'cmnd/computer';
@@ -92,7 +92,7 @@ describe('Tests the CLI', () => {
       }
     ];
 
-    const getDataMock = () => Promise.resolve(fakeData);
+    const getDataMock = async () => fakeData;
     const writeDataMock = (out: TopicCommand[]) => out;
 
     const topic = 'cmnd/computer';
@@ -135,7 +135,7 @@ describe('Tests the CLI', () => {
       }
     ];
 
-    const getDataMock = () => Promise.resolve(fakeData);
+    const getDataMock = async () => fakeData;
     const writeDataMock = (out: TopicCommand[]) => out;
 
     const topic = 'cmnd/other';
@@ -178,7 +178,7 @@ describe('Tests the CLI', () => {
       }
     ];
 
-    const getDataMock = () => Promise.resolve(fakeData);
+    const getDataMock = async () => fakeData;
     const writeDataMock = (out: TopicCommand[]) => out;
 
     const topic = 'cmnd/other';
@@ -210,7 +210,7 @@ describe('Tests the CLI', () => {
 
   it('add new event should not write to file when confirm is negative', () => {
     const fakeData: TopicCommand[] = [];
-    const getDataMock = () => Promise.resolve(fakeData);
+    const getDataMock = async () => fakeData;
     const writeDataMock = (out: TopicCommand[]) => out;
 
     const topic = 'cmnd/other';
@@ -240,9 +240,9 @@ describe('Tests the CLI', () => {
         ]
       }
     ];
-    const getDataMock = () => Promise.resolve(fakeData);
+    const getDataMock = async () => fakeData;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const writeDataMock = (data: TopicCommand[]) => Promise.resolve();
+    const writeDataMock = async (data: TopicCommand[]) => {};
 
     const topic = 'cmnd/computer';
     const whichEvent = ''; // select first and press enter
@@ -299,9 +299,9 @@ describe('Tests the CLI', () => {
         ]
       }
     ];
-    const getDataMock = () => Promise.resolve(fakeData);
+    const getDataMock = async () => fakeData;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const writeDataMock = (data: TopicCommand[]) => Promise.resolve();
+    const writeDataMock = async (data: TopicCommand[]) => {};
 
     const topic = 'cmnd/computer';
     const whichEvent = ''; // select first and press enter
@@ -356,9 +356,9 @@ describe('Tests the CLI', () => {
       }
     ];
 
-    const getDataMock = () => Promise.resolve(fakeData);
+    const getDataMock = async () => fakeData;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const writeDataMock = (data: TopicCommand[]) => Promise.resolve();
+    const writeDataMock = async (data: TopicCommand[]) => {};
 
     const topic = ''; // first topic in list
     const event = ''; // first event in list

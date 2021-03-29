@@ -15,14 +15,14 @@ const editLinesMenu = async (event: Command, key: keyof Command) => {
     name: 'editedLine',
     message: 'Make desired changes to event key and press enter',
     suggestOnly: true,
-    source: () => {
+    source: async () => {
       if (key === 'expectedPayloads') {
-        return Promise.resolve([event[key].toString()]);
+        return [event[key].toString()];
       }
       if (key === 'type') {
-        return Promise.resolve([CommandTypes.APPLICATION, CommandTypes.NIRCMD]);
+        return [CommandTypes.APPLICATION, CommandTypes.NIRCMD];
       }
-      return Promise.resolve([event[key] ?? '']);
+      return [event[key] ?? ''];
     },
     validate: input => {
       if (key === 'type') {
